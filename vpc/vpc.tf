@@ -1,6 +1,6 @@
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
-  name   = "boutique_app_vpc"
+  name   = "mutual_fund_vpc"
   cidr   = "10.0.0.0/16"
 
   azs             = ["${var.aws_region}a", "${var.aws_region}b", "${var.aws_region}c"]
@@ -24,5 +24,26 @@ module "vpc" {
   private_subnet_tags = {
     "kubernetes.io/role/internal-elb" = 1
   }
+
+}
+
+resource "aws_ssm_parameter" "vpc_id" {
+  name  = "/mutual_fund_app/vpc_id"
+  type  = "String"
+  value = module.vpc.vpc_id
+
+}
+
+resource "aws_ssm_parameter" "private_subnets" {
+  name  = "/mutual_fund_app/private_subnets"
+  type  = "StringList"
+  value = join(",", module.vpc.private_subnets)
+
+}
+
+resource "aws_ssm_parameter" "public_subnets" {
+  name  = "/mutual_fund_app/public_subnets"
+  type  = "StringList"
+  value = join(",", module.vpc.public_subnets)
 
 }
