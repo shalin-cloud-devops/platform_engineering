@@ -1,79 +1,100 @@
-name: "VPC CI"
+# Job flow - Two jobs - plan and apply.
+
+# This job will run on every push to main and on every pull request to main and when manually triggered.
+# It uses OIDC for getting permission to modify AWS resources, no keys used
+# Once the plan is ready, it's uploaded to GH artifactory for reference of next job
+# Configured in github UI setting - for approval on this env environment: production
+#
+
+name: "Terraform CI"
 
 on:
     push:
         paths:
-            - "platform_engineering/vpc/**.tf"
+            - "**/*.tf"
             - ".github/workflows/**"
     pull_request:
-    branches:
-        - main
-    paths:
-        - "platform_engineering/vpc/**.tf"
-        - ".github/workflows/**"
+        branches:
+            - main
+        paths:
+            - "**/*.tf"
+            - ".github/workflows/**"
+    # Clean, parameter-less manual trigger
     workflow_dispatch:
 
-    permissions:
-        contents: read
-        id-token: write
-        pull-requests: write
+permissions:
+    id-token: write
+    contents: read
+    pull-requests: write
 
-    jobs:
-        terraform-plan:
-            name: "Terraform Plan"
-            runs-on: ubuntu-latest
-
-            env:
-                AWS_REGION: us-east-1
-                TF_LOG: INFO
-
-            steps:
-                - name: Checkout code
-                  uses: actions/checkout@v3
-
-                - name: "AWS creds - OIDC"
-                  uses: aws-actions/configure-aws-credentials@v4
-                  with:
-                      role-to-assume: arn:aws:iam::514005485562:role/GitHubActionsTerraformRole
-                      aws-region: ${{ env.AWS_REGION }}
-
-                - name: "Setup Terraform"
-                  uses: hashicorp/setup-terraform@v3
-                  with:
-                      terraform_version: "1.11.0"
-
-                - name: Terraform Init
-                  run: terraform init
-
-                - name: Terraform Plan
-                  run: terraform plan
-
-                - name: "terraform plan upload"
-                  uses: actions/upload-artifact@v4
-                  with:
-                      name: tfplan
-                      path: tfplan
-                      retention-days: 1
-
-    terraform-apply:
-        name: "Terraform Apply"
+jobs:
+    terraform-plan:
+        name: "Terraform Validate & Plan"
         runs-on: ubuntu-latest
-        needs: terraform-plan
-        if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
-        environment: production
+
+        defaults:
+            run:
+                working-directory: ./vpc
 
         env:
             AWS_REGION: "us-east-1"
             TF_LOG: INFO
 
         steps:
-            - name: Checkout code
+            - name: "Checkout code"
               uses: actions/checkout@v4
 
             - name: "AWS creds - OIDC"
               uses: aws-actions/configure-aws-credentials@v4
               with:
                   role-to-assume: arn:aws:iam::514005485562:role/GitHubActionsTerraformRole
+                  aws-region: ${{ env.AWS_REGION }}
+
+            - name: "Setup Terraform"
+              uses: hashicorp/setup-terraform@v3
+              with:
+                  terraform_version: "1.11.0"
+
+            - name: "Terraform init"
+              id: init
+              run: terraform init
+
+            - name: "Terraform Plan"
+              id: plan
+              run: terraform plan -input=false -no-color -out=tfplan
+
+            - name: "terraform plan upload"
+              uses: actions/upload-artifact@v4
+              with:
+                  name: tfplan
+                  path: tfplan
+                  retention-days: 1
+
+    terraform-apply:
+        name: "Terraform Apply"
+        runs-on: ubuntu-latest
+        needs: terraform-plan
+        # Only run apply if on main branch or manually triggered
+        if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+        environment: production
+
+        defaults:
+            run:
+                working-directory: ./vpc
+
+        env:
+            AWS_REGION: "us-east-1" # Telling github actions to use us-east-1
+            TF_LOG: INFO
+
+        steps:
+            - name: "Checkout code"
+              uses: actions/checkout@v4
+
+            - name: "AWS creds - OIDC"
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                  role-to-assume: arn:aws:iam::514005485562:role/GitHubActionsTerraformRole
+                  # This role must be already created
                   aws-region: ${{ env.AWS_REGION }}
 
             - name: "Setup Terraform"
