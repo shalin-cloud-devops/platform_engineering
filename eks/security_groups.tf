@@ -1,7 +1,7 @@
 resource "aws_security_group" "mutual_fund_app_sg" {
   name        = "mutual_fund_app_sg"
   description = "Security group for mutual_fund App"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = data.aws_ssm_parameter.mutual_fund_app_vpc_id.value
 
   ingress {
     description     = "HTTPS from Bastion host"
@@ -29,7 +29,7 @@ resource "aws_security_group" "mutual_fund_app_sg" {
 resource "aws_security_group" "bastion_sg" {
   name        = "bastion_sg"
   description = "Security group for the Bastion Host"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = data.aws_ssm_parameter.mutual_fund_app_vpc_id.value
 
   egress {
     description = "Allow all outbound traffic"
