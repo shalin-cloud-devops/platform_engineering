@@ -21,11 +21,13 @@ data "aws_ssm_parameter" "mutual_fund_app_vpc_id" {
 }
 
 data "aws_ssm_parameter" "mutual_fund_app_private_subnets" {
-  name = "/mutual_fund_app/private_subnets"
+  name  = "/mutual_fund_app/private_subnets"
+  value = split(data.aws_ssm_parameter.mutual_fund_app_private_subnets.value, ",")
 
 }
 
 data "aws_ssm_parameter" "mutual_fund_app_public_subnets" {
-  name = "/mutual_fund_app/public_subnets"
+  name  = "/mutual_fund_app/public_subnets"
+  value = split(data.aws_ssm_parameter.mutual_fund_app_public_subnets.value, ",")
 
 }
