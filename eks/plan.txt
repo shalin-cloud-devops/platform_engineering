@@ -1,0 +1,9 @@
+$ terraform.exe plan
+Releasing state lock. This may take a few moments...
+╷
+│ Error: Reference to undeclared module
+│ 
+│   on security_groups.tf line 32, in resource "aws_security_group" "bastion_sg":
+│   32:   vpc_id      = module.vpc.vpc_id
+│ 
+│ No module call named "vpc" is declared in the root module.
