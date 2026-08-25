@@ -1,6 +1,6 @@
-resource "aws_security_group" "boutique_app_sg" {
-  name        = "boutique_app_sg"
-  description = "Security group for Boutique App"
+resource "aws_security_group" "mutual_fund_app_sg" {
+  name        = "mutual_fund_app_sg"
+  description = "Security group for mutual_fund App"
   vpc_id      = module.vpc.vpc_id
 
   ingress {
@@ -21,7 +21,7 @@ resource "aws_security_group" "boutique_app_sg" {
   }
 
   tags = {
-    Name        = "boutique_app_sg"
+    Name        = "mutual_fund_app_sg"
     Environment = "dev"
   }
 }
