@@ -35,7 +35,7 @@ module "eks" {
   }
 
   vpc_id                        = data.aws_ssm_parameter.mutual_fund_app_vpc_id.value
-  subnet_ids                    = data.aws_ssm_parameter.mutual_fund_app_private_subnets.value
+  subnet_ids                    = split(",", data.aws_ssm_parameter.mutual_fund_app_private_subnets.value)
   additional_security_group_ids = [aws_security_group.mutual_fund_app_sg.id]
 
   eks_managed_node_groups = {
