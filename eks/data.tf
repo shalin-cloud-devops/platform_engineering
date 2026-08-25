@@ -13,3 +13,19 @@ data "aws_ami" "ubuntu" {
 
   owners = ["099720109477"]
 }
+
+
+data "aws_ssm_parameter" "mutual_fund_app_vpc_id" {
+  name = "/mutual_fund_app/vpc_id"
+
+}
+
+data "aws_ssm_parameter" "mutual_fund_app_private_subnets" {
+  name = "/mutual_fund_app/private_subnets"
+
+}
+
+data "aws_ssm_parameter" "mutual_fund_app_public_subnets" {
+  name = "/mutual_fund_app/public_subnets"
+
+}

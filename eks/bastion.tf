@@ -52,7 +52,7 @@ module "bastion_host" {
   instance_type = "t2.micro"
   monitoring    = true
 
-  subnet_id                   = element(module.vpc.public_subnets, 0)
+  subnet_id                   = element(data.aws_ssm_parameter.mutual_fund_app_public_subnets, 0)
   vpc_security_group_ids      = [aws_security_group.bastion_sg.id]
   associate_public_ip_address = true
 

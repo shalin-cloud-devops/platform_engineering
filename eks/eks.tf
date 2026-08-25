@@ -34,9 +34,9 @@ module "eks" {
     }
   }
 
-  vpc_id                        = module.vpc.vpc_id
-  subnet_ids                    = module.vpc.private_subnets
-  additional_security_group_ids = [aws_security_group.boutique_app_sg.id]
+  vpc_id                        = data.aws_ssm_parameter.mutual_fund_app_vpc_id.value
+  subnet_ids                    = data.aws_ssm_parameter.mutual_fund_app_private_subnets.value
+  additional_security_group_ids = [data.aws_ssm_parameter.mutual_fund_app_security_group.id]
 
   eks_managed_node_groups = {
     boutique_nodes = {
