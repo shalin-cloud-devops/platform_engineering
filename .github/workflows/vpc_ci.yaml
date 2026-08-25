@@ -1,6 +1,6 @@
 # Job flow - Two jobs - plan and apply.
 
-# This job will run on every push to main and on every pull request to main and when manually triggered.
+# This job will run on every push and on every pull request to main and when manually triggered.
 # It uses OIDC for getting permission to modify AWS resources, no keys used
 # Once the plan is ready, it's uploaded to GH artifactory for reference of next job
 # Configured in github UI setting - for approval on this env environment: production
