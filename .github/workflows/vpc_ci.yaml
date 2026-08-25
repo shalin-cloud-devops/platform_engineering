@@ -106,7 +106,7 @@ jobs:
               uses: actions/download-artifact@v4
               with:
                   name: tfplan
-                  path: ./vpc/tfplan
+                  path: ./vpc/
 
             - name: "Terraform init"
               id: init
