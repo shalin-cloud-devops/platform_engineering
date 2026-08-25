@@ -17,7 +17,7 @@ on:
         branches:
             - main
         paths:
-            - vpc/*.tf"
+            - "vpc/*.tf"
             - ".github/workflows/**"
     # Clean, parameter-less manual trigger
     workflow_dispatch:
@@ -106,6 +106,7 @@ jobs:
               uses: actions/download-artifact@v4
               with:
                   name: tfplan
+                  path: ./vpc/tfplan
 
             - name: "Terraform init"
               id: init
