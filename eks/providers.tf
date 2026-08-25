@@ -1,0 +1,23 @@
+# Declaring the cloud provider, it's version and the default region to be used for the resources in this configuration.
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.28"
+    }
+  }
+  backend "s3" {
+    bucket       = "otel-eks-bucket"
+    key          = "mf_app_eks/terraform.tfstate"
+    region       = "us-east-1"
+    use_lockfile = true
+    encrypt      = true
+  }
+}
+
+provider "aws" {
+  region = var.aws_region
+}
+
+

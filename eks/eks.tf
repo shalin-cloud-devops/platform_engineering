@@ -1,0 +1,59 @@
+module "eks" {
+  source  = "terraform-aws-modules/eks/aws"
+  version = "~> 21.0"
+
+  name               = "boutique-app-eks"
+  kubernetes_version = "1.34"
+
+  addons = {
+
+    coredns = {}
+    eks-pod-identity-agent = {
+      before_compute = true
+    }
+    kube-proxy = {}
+    vpc-cni = {
+      before_compute = true
+    }
+  }
+
+  endpoint_public_access                   = false
+  enable_cluster_creator_admin_permissions = true
+
+  access_entries = {
+    bastion = {
+      principal_arn = aws_iam_role.bastion_ssm.arn
+      policy_associations = {
+        admin = {
+          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+          access_scope = {
+            type = "cluster"
+          }
+        }
+      }
+    }
+  }
+
+  vpc_id                        = module.vpc.vpc_id
+  subnet_ids                    = module.vpc.private_subnets
+  additional_security_group_ids = [aws_security_group.boutique_app_sg.id]
+
+  eks_managed_node_groups = {
+    boutique_nodes = {
+
+      ami_type       = "AL2023_x86_64_STANDARD"
+      instance_types = ["c7i-flex.large"]
+
+      min_size     = 2
+      max_size     = 10
+      desired_size = 2
+
+      tags = {
+        Name        = "boutique_app_node_group"
+        Environment = "dev"
+      }
+    }
+  }
+
+
+}
