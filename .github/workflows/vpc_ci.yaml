@@ -11,13 +11,13 @@ name: "Terraform CI"
 on:
     push:
         paths:
-            - "**/*.tf"
+            - "vpc/*.tf"
             - ".github/workflows/**"
     pull_request:
         branches:
             - main
         paths:
-            - "**/*.tf"
+            - vpc/*.tf"
             - ".github/workflows/**"
     # Clean, parameter-less manual trigger
     workflow_dispatch:
@@ -67,7 +67,7 @@ jobs:
               uses: actions/upload-artifact@v4
               with:
                   name: tfplan
-                  path: tfplan
+                  path: ./vpc/tfplan
                   retention-days: 1
 
     terraform-apply:
