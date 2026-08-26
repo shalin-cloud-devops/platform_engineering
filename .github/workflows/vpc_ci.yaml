@@ -18,7 +18,7 @@ on:
             - main
         paths:
             - "vpc/*.tf"
-            - ".github/workflows/**"
+            - ".github/workflows/vpc_ci.yaml"
     # Clean, parameter-less manual trigger
     workflow_dispatch:
 
