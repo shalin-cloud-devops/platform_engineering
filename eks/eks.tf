@@ -2,7 +2,7 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 21.0"
 
-  name               = "boutique-app-eks"
+  name               = "mutualfund-app-eks"
   kubernetes_version = "1.35"
 
   addons = {
@@ -20,10 +20,6 @@ module "eks" {
   endpoint_public_access                   = false
   enable_cluster_creator_admin_permissions = true
 
-  node_security_group_tags = {
-    "karpenter.sh/discovery" = "boutique-app-eks"
-  }
-
   access_entries = {
     bastion = {
       principal_arn = aws_iam_role.bastion_ssm.arn
@@ -36,10 +32,7 @@ module "eks" {
         }
       }
     }
-    karpenter = {
-      principal_arn = module.karpenter.node_iam_role_arn
-      type          = "EC2_LINUX"
-    }
+
   }
 
   vpc_id                        = data.aws_ssm_parameter.mutual_fund_app_vpc_id.value
@@ -57,7 +50,7 @@ module "eks" {
       desired_size = 2
 
       tags = {
-        Name        = "boutique_app_node_group"
+        Name        = "mutualfund-app_node_group"
         Environment = "dev"
       }
     }
@@ -65,15 +58,3 @@ module "eks" {
 
 }
 
-
-module "karpenter" {
-  source  = "terraform-aws-modules/eks/aws//modules/karpenter"
-  version = "~> 21.0"
-
-  cluster_name                    = module.eks.cluster_name
-  create_pod_identity_association = true
-
-  node_iam_role_additional_policies = {
-    AmazonSSMManagedInstanceCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
-  }
-}
