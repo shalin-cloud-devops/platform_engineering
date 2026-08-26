@@ -6,7 +6,7 @@
 # Configured in github UI setting - for approval on this env environment: production
 #
 
-name: "Terraform CI"
+name: "VPC CI"
 
 on:
     push:
@@ -62,6 +62,14 @@ jobs:
             - name: "Terraform Plan"
               id: plan
               run: terraform plan -input=false -no-color -out=tfplan
+
+            - name: "Install tf-summarize and print"
+              run: |
+                  curl -sSL "https://github.com/dineshba/tf-summarize/releases/latest/download/tf-summarize_linux_amd64.tar.gz" | tar -xz
+                  sudo mv tf-summarize /usr/local/bin/
+
+                  echo "=== Terraform Plan Summary ==="
+                  terraform show -json tfplan | tf-summarize
 
             - name: "terraform plan upload"
               uses: actions/upload-artifact@v4
