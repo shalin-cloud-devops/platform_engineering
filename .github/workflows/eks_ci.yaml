@@ -4,7 +4,7 @@ on:
     push:
         paths:
             - "eks/*.tf"
-            - ".github/workflows/vpc_ci.yaml"
+            - ".github/workflows/eks_ci.yaml"
     pull_request:
         branches:
             - main
