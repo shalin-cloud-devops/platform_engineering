@@ -12,7 +12,7 @@ on:
     push:
         paths:
             - "vpc/*.tf"
-            - ".github/workflows/**"
+            - ".github/workflows/vpc_ci.yaml"
     pull_request:
         branches:
             - main

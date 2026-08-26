@@ -10,7 +10,7 @@ on:
             - main
         paths:
             - "eks/*.tf"
-            - ".github/workflows/**"
+            - ".github/workflows/eks_ci.yaml"
     # Clean, parameter-less manual trigger
     workflow_dispatch:
 
