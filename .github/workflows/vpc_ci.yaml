@@ -69,7 +69,7 @@ jobs:
                   sudo mv tf-summarize /usr/local/bin/
 
                   echo "=== Terraform Plan Summary ==="
-                  terraform show -json tfplan | tf-summarize
+                  env TF_LOG= terraform show -json tfplan | tf-summarize
 
             - name: "terraform plan upload"
               uses: actions/upload-artifact@v4
