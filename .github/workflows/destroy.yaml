@@ -1,0 +1,93 @@
+name: "Destroy Terraform Resources"
+
+on:
+    workflow_dispatch:
+        inputs:
+            confirm:
+                description: "Type 'DESTROY' to confirm destruction of Terraform resources"
+                required: true
+                type: string
+
+permissions:
+    id-token: write
+    contents: read
+
+env:
+    AWS_REGION: "us-east-1"
+    TF_LOG: INFO
+
+jobs:
+    terraform-destroy-eks:
+        name: "Destroy EKS cluster"
+        runs-on: ubuntu-latest
+        environment:
+            name: "production"
+
+        defaults:
+            run:
+                working-directory: ./eks
+
+        steps:
+            - name: "Checkout code"
+              uses: actions/checkout@v4
+
+            - name: "Safety check before destroying"
+              run: |
+                  if [[ "${{ github.event.inputs.confirm }}" != "DESTROY" ]]; then
+                      echo "Error: You must type 'DESTROY' to confirm destruction of Terraform resources."
+                      exit 1
+                  fi
+            - name: "AWS creds - OIDC"
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                  role-to-assume: arn:aws:iam::514005485562:role/GitHubActionsTerraformRole
+                  aws-region: ${{ env.AWS_REGION }}
+
+            - name: "Setup Terraform"
+              uses: hashicorp/setup-terraform@v3
+              with:
+                  terraform_version: "1.11.0"
+
+            - name: "Terraform init"
+              run: terraform init
+
+            - name: "Terraform Destroy"
+              run: terraform destroy -auto-approve
+
+    destroy-vpc:
+        name: "Destroy VPC"
+        runs-on: ubuntu-latest
+        needs: terraform-destroy-eks
+        environment:
+            name: "production"
+
+        defaults:
+            run:
+                working-directory: ./vpc
+
+        steps:
+            - name: "Checkout code"
+              uses: actions/checkout@v4
+
+            - name: "Safety check before destroying"
+              run: |
+                  if [[ "${{ github.event.inputs.confirm }}" != "DESTROY" ]]; then
+                      echo "Error: You must type 'DESTROY' to confirm destruction of Terraform resources."
+                      exit 1
+                  fi
+            - name: "AWS creds - OIDC"
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                  role-to-assume: arn:aws:iam::514005485562:role/GitHubActionsTerraformRole
+                  aws-region: ${{ env.AWS_REGION }}
+
+            - name: "Setup Terraform"
+              uses: hashicorp/setup-terraform@v3
+              with:
+                  terraform_version: "1.11.0"
+
+            - name: "Terraform init"
+              run: terraform init
+
+            - name: "Terraform Destroy"
+              run: terraform destroy -auto-approve
