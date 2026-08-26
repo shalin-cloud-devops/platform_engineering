@@ -3,7 +3,7 @@ module "eks" {
   version = "~> 21.0"
 
   name               = "boutique-app-eks"
-  kubernetes_version = "1.34"
+  kubernetes_version = "1.35"
 
   addons = {
 
@@ -20,6 +20,10 @@ module "eks" {
   endpoint_public_access                   = false
   enable_cluster_creator_admin_permissions = true
 
+  node_security_group_tags = {
+    "karpenter.sh/discovery" = "boutique-app-eks"
+  }
+
   access_entries = {
     bastion = {
       principal_arn = aws_iam_role.bastion_ssm.arn
@@ -31,6 +35,10 @@ module "eks" {
           }
         }
       }
+    }
+    karpenter = {
+      principal_arn = module.karpenter.node_iam_role_arn
+      type          = "EC2_LINUX"
     }
   }
 
@@ -55,5 +63,17 @@ module "eks" {
     }
   }
 
+}
 
+
+module "karpenter" {
+  source  = "terraform-aws-modules/eks/aws//modules/karpenter"
+  version = "~> 21.0"
+
+  cluster_name                    = module.eks.cluster_name
+  create_pod_identity_association = true
+
+  node_iam_role_additional_policies = {
+    AmazonSSMManagedInstanceCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  }
 }
