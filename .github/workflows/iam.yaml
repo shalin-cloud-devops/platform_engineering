@@ -53,7 +53,7 @@ jobs:
 
             - name: "Terraform Plan"
               id: plan
-              run: terraform plan -input=false -no-color -out=tfplan
+              run: terraform plan -input=false -no-color -out=iam_tfplan
 
             - name: "Install tf-summarize and print"
               run: |
@@ -61,7 +61,7 @@ jobs:
                   sudo mv tf-summarize /usr/local/bin/
 
                   echo "=== Terraform Plan Summary ==="
-                  env TF_LOG= terraform show -json tfplan | tf-summarize
+                  env TF_LOG= terraform show -json iam_tfplan | tf-summarize
 
             - name: "terraform plan upload"
               uses: actions/upload-artifact@v4
