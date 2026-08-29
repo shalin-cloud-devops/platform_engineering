@@ -9,7 +9,7 @@ on:
         branches:
             - main
         paths:
-            - "cluster_iam_rbac/*.tf"
+            - "cluster_iam_rbac/*.tf*"
             - ".github/workflows/iam.yaml"
     # Clean, parameter-less manual trigger
     workflow_dispatch:
