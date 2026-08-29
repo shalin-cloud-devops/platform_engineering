@@ -44,7 +44,7 @@ resource "aws_iam_role_policy" "bastion_eks_describe" {
         Action = [
           "sts:AssumeRole"
         ]
-        Resource = aws_iam_role.fund_fetch_role.arn
+        Resource = "arn:aws:iam::514005485562:role/fund_fetch_role"
       }
 
     ]
