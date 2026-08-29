@@ -33,10 +33,20 @@ resource "aws_iam_role_policy" "bastion_eks_describe" {
           "eks:DescribeCluster",
           "eks:ListClusters",
           "eks:DescribeNodegroup",
-          "eks:UpdateNodegroupConfig"
+          "eks:UpdateNodegroupConfig",
         ]
+
         Resource = module.eks.cluster_arn
+      },
+
+      {
+        Effect = "Allow"
+        Action = [
+          "sts:AssumeRole"
+        ]
+        Resource = aws_iam_role.fund_fetch_role.arn
       }
+
     ]
   })
 }
