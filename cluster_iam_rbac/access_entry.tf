@@ -1,6 +1,6 @@
 resource "aws_eks_access_entry" "example" {
-  cluster_name      = aws_eks_cluster.example.name
-  principal_arn     = aws_iam_role.example.arn
-  kubernetes_groups = ["group-1", "group-2"]
+  cluster_name      = var.cluster_name
+  principal_arn     = aws_iam_role.fund_fetch_role.arn
+  kubernetes_groups = ["fund-fetchers-svc"]
   type              = "STANDARD"
 }

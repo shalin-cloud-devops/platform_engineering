@@ -1,8 +1,7 @@
-resource "aws_iam_role" "test_role" {
-  name = "test_role"
+resource "aws_iam_role" "fund_fetch_role" {
+  name = "fund_fetch_role"
 
-  # Terraform's "jsonencode" function converts a
-  # Terraform expression result to valid JSON syntax.
+
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -11,13 +10,14 @@ resource "aws_iam_role" "test_role" {
         Effect = "Allow"
         Sid    = ""
         Principal = {
-          Service = "ec2.amazonaws.com"
+          AWS = "arn:aws:iam::514005485562:root"
         }
       },
     ]
   })
 
   tags = {
-    tag-key = "tag-value"
+    Service = "Fund Fetching Service"
+    Team    = "Mutual Fund App - Dev"
   }
 }
