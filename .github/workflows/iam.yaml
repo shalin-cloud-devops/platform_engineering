@@ -3,7 +3,6 @@ name: "IAM CI"
 on:
     push:
         paths:
-            - "cluster_iam_rbac/*.tf"
             - ".github/workflows/iam.yaml"
     pull_request:
         branches:
