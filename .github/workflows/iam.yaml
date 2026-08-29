@@ -4,6 +4,7 @@ on:
     push:
         paths:
             - ".github/workflows/iam.yaml"
+            - "cluster_iam_rbac/*.tf"
     pull_request:
         branches:
             - main
