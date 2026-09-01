@@ -5,6 +5,11 @@ module "eks" {
   name               = "mutualfund-app-eks"
   kubernetes_version = "1.35"
 
+  node_security_group_tags = {
+    "karpenter.sh/discovery" = "mutualfund-app-eks"
+  }
+
+
   addons = {
 
     coredns = {}
