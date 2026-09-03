@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/shalin-cloud-devops/platform_engineering
     targetRevision: main
-    path: root
+    path: apps
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
