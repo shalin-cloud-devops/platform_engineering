@@ -1,0 +1,39 @@
+apiVersion: karpenter.sh/v1
+kind: NodePool
+metadata:
+  name: general
+spec:
+  template:
+    spec:
+      requirements:
+        # Use Spot
+        - key: karpenter.sh/capacity-type
+          operator: In
+          values:
+            - spot
+        # Only AMD64 instances
+        - key: kubernetes.io/arch
+          operator: In
+          values:
+            - amd64
+        # General-purpose + compute-optimized instances
+        - key: karpenter.k8s.aws/instance-category
+          operator: In
+          values:
+            - c
+            - m
+            - r
+      # Connect this NodePool to your EC2NodeClass
+      nodeClassRef:
+        group: karpenter.k8s.aws
+        kind: EC2NodeClass
+        name: default
+  # Maximum amount of capacity this NodePool can provision
+  limits:
+    cpu: "100"
+    memory: 500Gi
+  disruption:
+    # Karpenter can consolidate underutilized nodes
+    consolidationPolicy: WhenEmptyOrUnderutilized
+    # Don't aggressively disrupt nodes
+    consolidateAfter: 5m
