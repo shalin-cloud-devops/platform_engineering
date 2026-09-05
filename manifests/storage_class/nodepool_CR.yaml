@@ -1,0 +1,32 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaNodePool
+metadata:
+  name: kafka-pool
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: mfapp
+spec:
+  replicas: 1
+  roles:
+    - controller
+    - broker
+  template:
+    pod:
+      tolerations:
+        - key: dedicated
+          operator: Equal
+          value: critical
+          effect: NoSchedule
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: karpenter.sh/nodepool
+                    operator: In
+                    values:
+                      - critical
+  storage:
+    type: persistent-claim
+    size: 10Gi
+    class: mfapp-ebs-gp3
