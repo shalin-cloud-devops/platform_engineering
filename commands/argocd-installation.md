@@ -135,7 +135,7 @@ Then run this from your local machine:
 
 ```bash
 aws ssm start-session \
-  --target i-07063efdeb9c2a966 \
+  --target i-018328baacad8d944 \
   --document-name AWS-StartPortForwardingSession \
   --parameters '{"portNumber":["8080"],"localPortNumber":["8080"]}'
 ```
@@ -146,4 +146,4 @@ Deploy Root Application - App of Apps
 
 kubectl apply -f https://raw.githubusercontent.com/shalin-cloud-devops/platform_engineering/main/bootstrap/root.yaml
 
-
+kubectl logs -n karpenter -l app.kubernetes.io/name=karpenter -c controller --tail=500 | grep -iE "error|fail|ec2nodeclass"
