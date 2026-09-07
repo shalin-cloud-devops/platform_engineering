@@ -27,6 +27,12 @@ spec:
             - c
             - m
             - r
+
+        - key: karpenter.k8s.aws/instance-generation
+          operator: Gt
+          values:
+            - "2"
+
       # Connect this NodePool to your EC2NodeClass
       nodeClassRef:
         group: karpenter.k8s.aws
