@@ -4,7 +4,7 @@ metadata:
   name: default
 spec:
   amiFamily: AL2023
-  role: mutual_fund_nodes-eks-node-group-5efce52f0131ec3f8aa4bcc2d7
+  role: mutual_fund_nodes-eks-node-group-396258e1f259bbfcd0ee08117c
   subnetSelectorTerms:
     - tags:
         karpenter.sh/discovery: mutualfund-app-eks
