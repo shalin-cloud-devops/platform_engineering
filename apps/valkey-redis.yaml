@@ -27,10 +27,10 @@ spec:
           enabled: true
           usersExistingSecret: valkey-default
 
-        aclUsers:
-          default:
-            permissions: "~* &* +@all"
-            passwordKey: default
+          aclUsers:
+            default:
+              permissions: "~* &* +@all"
+              passwordKey: default
 
         resources:
           requests:
