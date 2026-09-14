@@ -29,12 +29,12 @@ resource "aws_iam_instance_profile" "db_ssm_instance_profile" {
 module "db_host" {
   source        = "terraform-aws-modules/ec2-instance/aws"
   name          = "DB_Host"
-  ami           = "data.aws_ami.ubuntu.id"
+  ami           = data.aws_ami.ubuntu.id
   instance_type = "t3.large"
   monitoring    = true
 
-  subnet_id                   = data.aws_ssm_parameter.mutual_fund_app_vpc_id.value
-  vpc_security_group_ids      = []
+  subnet_id                   = split(",", data.aws_ssm_parameter.mutual_fund_app_private_subnets.value)[0]
+  vpc_security_group_ids      = [aws_security_group.db_security_group.id]
   associate_public_ip_address = false
   iam_instance_profile        = aws_iam_instance_profile.db_ssm_instance_profile.name
   user_data                   = file("${path.module}/scripts/db_install.sh")
