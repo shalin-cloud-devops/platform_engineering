@@ -9,7 +9,7 @@ terraform {
   }
   backend "s3" {
     bucket       = "otel-eks-bucket"
-    key          = "mf_app_microservices/terraform.tfstate"
+    key          = "mf_app_apps_role/terraform.tfstate"
     region       = "us-east-1"
     use_lockfile = true
     encrypt      = true
