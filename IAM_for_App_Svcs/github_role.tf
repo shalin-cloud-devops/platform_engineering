@@ -1,5 +1,5 @@
-#checkov:skip=CKV_AWS_393:GitHub Actions OIDC is correct, CHEKOV is yet to update the CLI verison from - 3.3.19
 resource "aws_iam_role" "mf_app_ecr_role" {
+  #checkov:skip=CKV_AWS_393:GitHub Actions OIDC is correct, CHEKOV is yet to update the CLI verison from - 3.3.19
   name = "mf_app_ecr_role"
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
