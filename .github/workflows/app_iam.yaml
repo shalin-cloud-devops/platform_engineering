@@ -58,6 +58,14 @@ jobs:
           path: ./IAM_for_App_Svcs/tfplan
           retention-days: 1
 
+      - name: "Checkov Scan"
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          directory: ./IAM_for_App_Svcs
+          quiet: true
+          output_format: "cli"
+          #soft-fail: true
+
   terraform-apply:
     name: "Terraform Apply"
     runs-on: ubuntu-latest
