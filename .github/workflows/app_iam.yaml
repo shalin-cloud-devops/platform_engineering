@@ -62,9 +62,14 @@ jobs:
         uses: bridgecrewio/checkov-action@v12
         with:
           directory: ./IAM_for_App_Svcs
-          quiet: true
-          output_format: "cli"
-          #soft-fail: true
+          output_format: sarif
+          output_file_path: checkov_results.sarif
+          #soft_fail: true
+
+      - name: "Checkov Plan upload"
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: checkov_results.sarif
 
   terraform-apply:
     name: "Terraform Apply"

@@ -1,3 +1,4 @@
+#checkov:skip=CKV_AWS_393:GitHub Actions OIDC is correct, CHEKOV is yet to update the CLI verison from - 3.3.19
 resource "aws_iam_role" "mf_app_ecr_role" {
   name = "mf_app_ecr_role"
   assume_role_policy = jsonencode({
@@ -14,7 +15,7 @@ resource "aws_iam_role" "mf_app_ecr_role" {
             "token.actions.githubusercontent.com:aud" : "sts.amazonaws.com"
             "token.actions.githubusercontent.com:sub" : [
               "repo:shalin-cloud-devops@219416972/mf_fin_app@1369936654:ref:refs/heads/main",
-              "repo:shalin-cloud-devops@219416972/mf_fin_app@1369936654:environment:production",
+              "repo:shalin-cloud-devops@219416972/mf_fin_app@1369936654:environment:production"
             ]
 
           },
