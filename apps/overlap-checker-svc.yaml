@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: overlap-checker
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/shalin-cloud-devops/mf_fin_app.git
+    path: overlap_checker/helm
+    targetRevision: main
+    helm:
+      values: |
+        deployment:
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "1Gi"
+            limits:
+              cpu: "1"
+              memory: "1.5Gi"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mf-fin-app
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

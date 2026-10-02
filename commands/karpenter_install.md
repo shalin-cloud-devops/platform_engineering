@@ -18,7 +18,7 @@ kubectl logs -n kube-system deploy/karpenter | grep -i -E "cred|assume|error|den
 
 -----------
 
-Check the node groups
+Check the node groups 
 
 aws eks list-nodegroups \
   --cluster-name mutualfund-app-eks
@@ -27,7 +27,7 @@ desribe it
 
 aws eks describe-nodegroup \
   --cluster-name mutualfund-app-eks \
-  --nodegroup-name mutual_fund_nodes-f225badc1db5ba42df43e3f2ae \
+  --nodegroup-name mutual_fund_nodes-0a467993d307f5cb7113ee3d50 \
   --query 'nodegroup.nodeRole' \
   --output text
 

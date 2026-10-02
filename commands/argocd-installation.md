@@ -38,7 +38,7 @@ Shows the installed Helm version.
 ## 3. Add and check the Argo CD Helm chart
 
 ```bash
-helm repo add argo https://argoproj.github.io/argo-helm
+    helm repo add argo https://argoproj.github.io/argo-helm
 ```
 
 Adds the Argo CD Helm repository.
@@ -135,7 +135,7 @@ Then run this from your local machine:
 
 ```bash
 aws ssm start-session \
-  --target i-018328baacad8d944 \
+  --target i-0bb43ebf71a23964d \
   --document-name AWS-StartPortForwardingSession \
   --parameters '{"portNumber":["8080"],"localPortNumber":["8080"]}'
 ```
@@ -144,6 +144,12 @@ Creates an SSM tunnel from your local machine to port `8080` on the bastion.
 
 Deploy Root Application - App of Apps
 
-kubectl apply -f https://raw.githubusercontent.com/shalin-cloud-devops/platform_engineering/main/bootstrap/root.yaml
+  kubectl apply -f https://raw.githubusercontent.com/shalin-cloud-devops/platform_engineering/main/bootstrap/root.yaml
 
 kubectl logs -n karpenter -l app.kubernetes.io/name=karpenter -c controller --tail=500 | grep -iE "error|fail|ec2nodeclass"
+
+
+kubectl create secret generic valkey-auth -n valkey --from-literal=password=valkeytest
+
+kubectl delete secret valkey-default -n valkey
+kubectl create secret generic valkey-default -n valkey --from-literal=default=valkeytest
