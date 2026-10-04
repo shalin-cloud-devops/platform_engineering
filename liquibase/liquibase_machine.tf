@@ -10,6 +10,6 @@ module "liquibase_host" {
   vpc_security_group_ids      = [data.aws_ssm_parameter.db_clients_sg_id.value, aws_security_group.liquibase_sg.id]
   associate_public_ip_address = false
   iam_instance_profile        = data.aws_ssm_parameter.db_instance_profile.value
-  user_data                   = file("${path.module}/scripts/db_install.sh")
+  user_data                   = file("${path.module}/scripts/docker.sh")
 
 }
