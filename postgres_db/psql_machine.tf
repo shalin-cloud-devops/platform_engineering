@@ -30,7 +30,7 @@ module "db_host" {
   source        = "terraform-aws-modules/ec2-instance/aws"
   name          = "DB_Host"
   ami           = data.aws_ami.ubuntu.id
-  instance_type = "t3.large"
+  instance_type = "t3.medium"
   monitoring    = true
 
   subnet_id                   = split(",", data.aws_ssm_parameter.mutual_fund_app_private_subnets.value)[0]
